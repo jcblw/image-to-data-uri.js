@@ -4,9 +4,11 @@ module.exports = function (url, cb) {
     var canvas = document.createElement('canvas'),
         img = document.createElement('img');
 
+    // allow for cross origin that has correct headers
+    img.crossOrigin = "Anonymous"; 
+
     img.onload = function () {
         var ctx = canvas.getContext('2d');
-
         // match size of image
         canvas.width = img.width;
         canvas.height = img.height;
@@ -15,10 +17,10 @@ module.exports = function (url, cb) {
         ctx.drawImage(img, 0, 0);
 
         // Get the data-URI formatted image
-        cb(canvas.toDataURL('image/png'));
+        cb( null, canvas.toDataURL('image/png') );
     };
 
-    img.ononerror = function () {
+    img.onerror = function () {
         cb(new Error('FailedToLoadImage'));
     };
 
